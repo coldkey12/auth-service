@@ -1,26 +1,49 @@
 package kz.don.auth.envers;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.envers.RevisionEntity;
 import org.hibernate.envers.RevisionNumber;
 import org.hibernate.envers.RevisionTimestamp;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "audit_envers_info")
-@RevisionEntity(UserRevisionListener.class)
+@RevisionEntity(AuditRevisionListener.class)
+@Data
 public class AuditEnversInfo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @RevisionNumber
-    private int id;
+    private Integer id;
 
     @RevisionTimestamp
-    private long timestamp;
+    private Long timestamp;
 
-    @Column(name = "username")
+    // Add operation type field
+    @Column(name = "operation_type")
+    private String operationType;
+
+    // Add username who performed the operation
     private String username;
+
+    // Optional: Add IP address
+    @Column(name = "ip_address")
+    private String ipAddress;
+
+    @Transient
+    public String getOperationTypeAsString() {
+        // This would need to be set from the revision listener
+        return operationType;
+    }
+
+    // Or get it from the revision type in queries
+    @Transient
+    public String getRevisionTypeAsString(org.hibernate.envers.RevisionType revisionType) {
+        return switch (revisionType) {
+            case ADD -> "INSERT";
+            case MOD -> "UPDATE";
+            case DEL -> "DELETE";
+        };
+    }
 }
