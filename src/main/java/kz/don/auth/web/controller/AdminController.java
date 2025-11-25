@@ -121,7 +121,8 @@ public class AdminController {
     public UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
-                .username(user.getUsername())
+                .email(user.getEmail())
+                .fullName(user.getFullName())
                 .role(user.getRole().name())
                 .enabled(user.isEnabled())
                 .createdAt(user.getCreatedAt())

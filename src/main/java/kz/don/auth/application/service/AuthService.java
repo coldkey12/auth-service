@@ -39,12 +39,13 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     public AuthResponse register(RegisterRequest request) throws Exception {
-        if (userRepository.existsByUsername(request.getUsername())) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new Exception("Username already taken");
         }
 
         User user = User.builder()
-                .username(request.getUsername())
+                .email(request.getEmail())
+                .fullName(request.getFullName())  // Add this
                 .password(passwordEncoder.encode(request.getPassword()))
                 .enabled(true)
                 .role(RoleEnum.USER)
@@ -57,12 +58,12 @@ public class AuthService {
     }
 
     public AuthResponse login(AuthRequest request) {
-        log.info("Attempting login for user: {}", request.getUsername());
+        log.info("Attempting login for user: {}", request.getEmail());
 
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            request.getUsername(),
+                            request.getEmail(),
                             request.getPassword()
                     )
             );
@@ -72,10 +73,10 @@ public class AuthService {
             log.info("User logged in: {}", user.getUsername());
             return generateAuthResponse(user);
         } catch (BadCredentialsException e) {
-            log.error("Bad credentials for user: {}", request.getUsername());
+            log.error("Bad credentials for user: {}", request.getEmail());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password", e);
         } catch (Exception e) {
-            log.error("Authentication failed for user: {}", request.getUsername(), e);
+            log.error("Authentication failed for user: {}", request.getEmail(), e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Authentication failed", e);
         }
     }

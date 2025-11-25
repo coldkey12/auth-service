@@ -17,13 +17,13 @@ public class AuthServiceApplication {
 	}
 
 	@Bean
-	CommandLineRunner initAdmin(UserRepository userRepository, PasswordEncoder encoder) {
+	CommandLineRunner initAdmin(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		return args -> {
-			// Create initial admin user if not exists
-			if (userRepository.findByUsername("authority_holder").isEmpty()) {
+			if (userRepository.findByEmail("admin@example.com").isEmpty()) {
 				User admin = User.builder()
-						.username("authority_holder")
-						.password(encoder.encode("=EqX67Ova7Jl")) // Change in production!
+						.email("admin@example.com")
+						.fullName("Administrator")
+						.password(passwordEncoder.encode("admin123"))
 						.role(RoleEnum.ADMIN)
 						.enabled(true)
 						.build();

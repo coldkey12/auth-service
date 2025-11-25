@@ -35,7 +35,10 @@ public class User implements UserDetails {
     private UUID id;
 
     @Column(unique = true, nullable = false)
-    private String username;
+    private String email;
+
+    @Column(nullable = false)
+    private String fullName;
 
     @Column(nullable = false)
     private String password;
@@ -52,6 +55,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(nullable = false)
+    private boolean enabled = true;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
@@ -64,7 +70,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email; // Spring Security uses this for authentication
     }
 
     @Override
@@ -82,14 +88,8 @@ public class User implements UserDetails {
         return true;
     }
 
-    @Column(nullable = false)
-    private boolean enabled = true;
-
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
     }
 }
