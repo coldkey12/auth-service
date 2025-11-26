@@ -1,5 +1,6 @@
 package kz.don.auth.web.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import kz.don.auth.application.service.AuthService;
 import kz.don.auth.web.dto.request.RefreshTokenRequest;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,8 +52,10 @@ public class AuthController {
     })
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
-            @Valid @RequestBody AuthRequest request
+            @Valid @RequestBody AuthRequest request,
+            HttpServletResponse response
     ) {
+        setAuthCookies(response, authService.login(request));
         return ResponseEntity.ok(authService.login(request));
     }
 
@@ -100,9 +104,59 @@ public class AuthController {
     })
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(
-            @Valid @RequestBody RefreshTokenRequest request
+            @Valid @RequestBody RefreshTokenRequest request,
+            HttpServletResponse response
     ) {
+        clearAuthCookies(response);
         authService.logout(request);
         return ResponseEntity.ok().build();
+    }
+
+    private void setAuthCookies(HttpServletResponse response, AuthResponse authResponse) {
+        // Access Token Cookie
+        String accessTokenCookie = ResponseCookie.from("accessToken", authResponse.getAccessToken())
+                .httpOnly(true)
+                .secure(true) // Required for SameSite=None
+                .sameSite("None") // Cross-site cookies
+                .path("/")
+                .maxAge(24 * 60 * 60) // 1 day
+                .build()
+                .toString();
+        response.addHeader("Set-Cookie", accessTokenCookie);
+
+        // Refresh Token Cookie
+        String refreshTokenCookie = ResponseCookie.from("refreshToken", authResponse.getRefreshToken())
+                .httpOnly(true)
+                .secure(true) // Required for SameSite=None
+                .sameSite("None") // Cross-site cookies
+                .path("/")
+                .maxAge(7 * 24 * 60 * 60) // 7 days
+                .build()
+                .toString();
+        response.addHeader("Set-Cookie", refreshTokenCookie);
+    }
+
+    private void clearAuthCookies(HttpServletResponse response) {
+        // Create cookies with expiration in the past
+        String accessTokenCookie = ResponseCookie.from("accessToken", "")
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/")
+                .maxAge(24 * 60 * 60) // Immediately expire
+                .build()
+                .toString();
+
+        String refreshTokenCookie = ResponseCookie.from("refreshToken", "")
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/")
+                .maxAge(7 * 24 * 60 * 60) // Immediately expire
+                .build()
+                .toString();
+
+        response.addHeader("Set-Cookie", accessTokenCookie);
+        response.addHeader("Set-Cookie", refreshTokenCookie);
     }
 }
