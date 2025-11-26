@@ -20,5 +20,7 @@ public class AuthResponse {
 
     private String username;
 
+    private String fullName;
+
     private RoleEnum role;
 }

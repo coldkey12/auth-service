@@ -36,11 +36,8 @@ public class AuditLogService {
                     .userId(request.getUserId())
                     .action(request.getAction())
                     .entityType(request.getEntityType())
-                    .entityId(request.getEntityId())
                     .timestamp(parseTimestamp(request.getTimestamp()))
-                    .details(serializeDetails(request.getDetails()))
                     .ipAddress(request.getIpAddress())
-                    .userAgent(request.getUserAgent())
                     .serviceName(request.getServiceName())
                     .build();
 

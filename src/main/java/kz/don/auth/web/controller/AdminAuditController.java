@@ -1,9 +1,6 @@
 package kz.don.auth.web.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kz.don.auth.application.service.AuditLogService;
@@ -24,7 +21,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/admin/audit")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('AUTHORITY')")
 @RequiredArgsConstructor
 @Tag(name = "Admin Audit Controller", description = "Administrative operations for audit log management")
 @SecurityRequirement(name = "bearerAuth")

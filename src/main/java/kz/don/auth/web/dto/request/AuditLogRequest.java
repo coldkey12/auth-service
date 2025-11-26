@@ -25,16 +25,9 @@ public class AuditLogRequest {
     @NotBlank(message = "Entity type is required")
     private String entityType; // ORDER, PRODUCT, PAYMENT, etc.
 
-    @NotBlank(message = "Entity ID is required")
-    private String entityId;
-
     private String timestamp; // ISO format timestamp from Python service
 
-    private Map<String, Object> details; // Additional metadata
-
     private String ipAddress;
-
-    private String userAgent;
 
     private String serviceName; // Name of the service that generated the log
 }

@@ -48,7 +48,8 @@ public class AuthService {
                 .fullName(request.getFullName())  // Add this
                 .password(passwordEncoder.encode(request.getPassword()))
                 .enabled(true)
-                .role(RoleEnum.USER)
+                .role(RoleEnum.CLIENT)
+                .fullName(request.getFullName())
                 .build();
 
         user = userRepository.save(user);
@@ -157,6 +158,7 @@ public class AuthService {
                 .refreshToken(refreshToken)
                 .userId(user.getId())
                 .username(user.getUsername())
+                .fullName(user.getFullName())
                 .role(user.getRole())
                 .build();
     }

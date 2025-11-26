@@ -24,7 +24,7 @@ public class AuthServiceApplication {
 						.email("admin@example.com")
 						.fullName("Administrator")
 						.password(passwordEncoder.encode("admin123"))
-						.role(RoleEnum.ADMIN)
+						.role(RoleEnum.AUTHORITY)
 						.enabled(true)
 						.build();
 				userRepository.save(admin);

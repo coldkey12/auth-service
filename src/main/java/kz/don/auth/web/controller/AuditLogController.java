@@ -4,10 +4,12 @@ import kz.don.auth.application.service.AuditLogService;
 import kz.don.auth.web.dto.request.AuditLogRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/audit")
+@PreAuthorize("hasAnyRole('AUTHORITY', 'CLIENT', 'ANALYTIC')")
 @RequiredArgsConstructor
 public class AuditLogController {
 
