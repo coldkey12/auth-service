@@ -47,6 +47,7 @@ public class AuthService {
                 .email(request.getEmail())
                 .fullName(request.getFullName())  // Add this
                 .password(passwordEncoder.encode(request.getPassword()))
+                .role(RoleEnum.valueOf(request.getRole()))
                 .enabled(true)
                 .role(RoleEnum.CLIENT)
                 .fullName(request.getFullName())
@@ -128,6 +129,7 @@ public class AuthService {
                     .accessToken(newAccessToken)
                     .refreshToken(newRefreshToken)
                     .userId(user.getId())
+                    .fullName(user.getFullName())
                     .username(user.getUsername())
                     .role(user.getRole())
                     .build();

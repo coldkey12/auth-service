@@ -17,6 +17,8 @@ public class RegisterRequest {
     @Email(message = "Invalid email format")
     private String email;
 
+    private String role;
+
     @NotBlank(message = "Full name cannot be blank")
     private String fullName;
 
