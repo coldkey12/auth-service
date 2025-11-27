@@ -8,7 +8,7 @@ A microservice for authentication built with Spring Boot 4.0, providing JWT-base
 - **User Management** — Registration, login, and role-based access control
 - **Refresh Token Flow** — Seamless token renewal without re-authentication
 - **Audit Logging** — Full audit trail using Hibernate Envers with history tables
-- **Event Streaming** — Kafka integration for audit event publishing
+
 - **API Documentation** — Interactive Swagger UI for API exploration
 
 ## Tech Stack
@@ -19,9 +19,7 @@ A microservice for authentication built with Spring Boot 4.0, providing JWT-base
 | Language | Java 21 |
 | Database | PostgreSQL |
 | Security | Spring Security + JWT (jjwt) |
-| Migrations | Flyway |
 | Auditing | Hibernate Envers |
-| Messaging | Apache Kafka |
 | Docs | SpringDoc OpenAPI (Swagger) |
 | Build | Maven |
 
@@ -29,7 +27,6 @@ A microservice for authentication built with Spring Boot 4.0, providing JWT-base
 
 - Java 21+
 - PostgreSQL 14+
-- Apache Kafka (optional, for audit events)
 - Maven 3.9+
 
 ## Getting Started
@@ -80,10 +77,6 @@ jwt:
   secret: ${JWT_SECRET}
   expiration: 3600000        # Access token: 1 hour
   refresh-expiration: 86400000  # Refresh token: 24 hours
-
-spring:
-  kafka:
-    bootstrap-servers: localhost:9092
 ```
 
 ## API Endpoints
@@ -179,8 +172,8 @@ src/main/java/kz/don/auth/
 ## Running with Docker
 
 ```bash
-# Start dependencies
-docker-compose up -d postgres kafka
+# Start PostgreSQL
+docker-compose up -d postgres
 
 # Run the application
 mvn spring-boot:run
