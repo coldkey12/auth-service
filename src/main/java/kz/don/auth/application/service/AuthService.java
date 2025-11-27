@@ -49,7 +49,7 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(RoleEnum.valueOf(request.getRole()))
                 .enabled(true)
-                .role(RoleEnum.CLIENT)
+                .role(RoleEnum.valueOf(request.getRole()))
                 .fullName(request.getFullName())
                 .build();
 
