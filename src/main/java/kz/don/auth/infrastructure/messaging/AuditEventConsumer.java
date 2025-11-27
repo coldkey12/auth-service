@@ -23,11 +23,11 @@ public class AuditEventConsumer {
     private final AuditLogRepository auditLogRepository;
     private final ObjectMapper objectMapper;
 
-    @KafkaListener(
-            topics = "${kafka.topic.audit-events:audit-events}",
-            groupId = "${spring.kafka.consumer.group-id:audit-service}",
-            containerFactory = "kafkaListenerContainerFactory"
-    )
+//    @KafkaListener(
+//            topics = "${kafka.topic.audit-events:audit-events}",
+//            groupId = "${spring.kafka.consumer.group-id:audit-service}",
+//            containerFactory = "kafkaListenerContainerFactory"
+//    )
     @Transactional
     public void consumeAuditEvent(
             @Payload String message,

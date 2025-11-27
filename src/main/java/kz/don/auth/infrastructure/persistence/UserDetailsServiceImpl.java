@@ -1,6 +1,5 @@
 package kz.don.auth.infrastructure.persistence;
 
-import kz.don.auth.domain.entity.User;
 import kz.don.auth.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
